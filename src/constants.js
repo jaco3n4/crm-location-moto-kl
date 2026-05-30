@@ -40,4 +40,5 @@ export const CHANNELS = ['WhatsApp', 'Téléphone', 'Email', 'Instagram', 'Sur p
 export const CURRENCY = 'RM'
 
 // Clé de stockage localStorage (versionnée pour les migrations futures).
-export const STORAGE_KEY = 'crm-moto-kl:v1'
+// v2 : remplacement des exemples de démo par de vraies agences de KL.
+export const STORAGE_KEY = 'crm-moto-kl:v2'

@@ -6,7 +6,9 @@ import { downloadJSON, todayISO } from './utils.js'
 import Header from './components/Header.jsx'
 import StatsBar from './components/StatsBar.jsx'
 import Toolbar from './components/Toolbar.jsx'
+import ViewSwitcher from './components/ViewSwitcher.jsx'
 import AgencyCard from './components/AgencyCard.jsx'
+import PriceComparator from './components/PriceComparator.jsx'
 import AgencyModal from './components/AgencyModal.jsx'
 import ConfirmDialog from './components/ConfirmDialog.jsx'
 import EmptyState from './components/EmptyState.jsx'
@@ -20,6 +22,7 @@ export default function App() {
   const [statusFilter, setStatusFilter] = useState('all')
   const [zoneFilter, setZoneFilter] = useState('all')
   const [sort, setSort] = useState('recent')
+  const [view, setView] = useState('cards') // 'cards' | 'compare'
 
   const [editing, setEditing] = useState(null) // fiche en cours d'édition (ou null)
   const [confirm, setConfirm] = useState(null) // { title, message, onConfirm }
@@ -180,8 +183,17 @@ export default function App() {
           onResetStatuses={handleResetStatuses}
         />
 
+        <div className="view-bar">
+          <ViewSwitcher view={view} onChange={setView} />
+          <span className="result-count">
+            {visible.length} agence{visible.length > 1 ? 's' : ''} affichée{visible.length > 1 ? 's' : ''}
+          </span>
+        </div>
+
         {visible.length === 0 ? (
           <EmptyState hasAgencies={agencies.length > 0} onAdd={handleAdd} />
+        ) : view === 'compare' ? (
+          <PriceComparator agencies={visible} onEdit={handleEdit} />
         ) : (
           <section className="grid" aria-label="Liste des agences">
             {visible.map((a) => (

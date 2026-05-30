@@ -23,6 +23,34 @@ export function formatPrice(value) {
   return `${CURRENCY} ${n.toLocaleString('en-MY')}`
 }
 
+function num(value) {
+  if (value === '' || value === null || value === undefined) return null
+  const n = Number(value)
+  return Number.isNaN(n) ? null : n
+}
+
+export function hasAnyPrice(agency) {
+  return num(agency.prixJour) != null || num(agency.prixSemaine) != null || num(agency.prixMois) != null
+}
+
+// Coût journalier « effectif » le plus bas : on ramène la semaine (/7) et le
+// mois (/30) à un prix par jour pour comparer les offres sur la même base.
+export function effectiveDaily(agency) {
+  const day = num(agency.prixJour)
+  const week = num(agency.prixSemaine)
+  const month = num(agency.prixMois)
+  const candidates = [day, week != null ? week / 7 : null, month != null ? month / 30 : null].filter(
+    (v) => v != null && v > 0,
+  )
+  if (candidates.length === 0) return null
+  return Math.min(...candidates)
+}
+
+export function formatEffective(value) {
+  if (value == null) return null
+  return `${CURRENCY} ${Math.round(value).toLocaleString('en-MY')}/j`
+}
+
 // ── Génération du message de prospection ───────────────────────────────────
 // Message en anglais (langue commune à KL) pour demander les tarifs et infos.
 export function defaultEnquiry(agency) {

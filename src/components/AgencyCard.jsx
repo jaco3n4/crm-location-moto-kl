@@ -7,6 +7,8 @@ import {
   normalizeUrl,
   formatPrice,
   formatDate,
+  effectiveDaily,
+  formatEffective,
 } from '../utils.js'
 
 function Stars({ value }) {
@@ -33,6 +35,7 @@ export default function AgencyCard({ agency, onEdit, onDelete, onStatusChange })
     { label: '/ sem.', value: formatPrice(agency.prixSemaine) },
     { label: '/ mois', value: formatPrice(agency.prixMois) },
   ].filter((p) => p.value)
+  const eff = formatEffective(effectiveDaily(agency))
 
   return (
     <article className="card">
@@ -56,6 +59,11 @@ export default function AgencyCard({ agency, onEdit, onDelete, onStatusChange })
                   <strong>{p.value}</strong> {p.label}
                 </span>
               ))}
+              {eff && (
+                <span className="price-chip eff" title="Coût/jour le plus bas (semaine ÷ 7, mois ÷ 30)">
+                  ≈ <strong>{eff}</strong>
+                </span>
+              )}
             </div>
           )}
           <Stars value={agency.note} />

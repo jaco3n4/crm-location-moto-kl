@@ -33,6 +33,9 @@ body {
   font-family: var(--font);
   color: var(--text);
   background: var(--bg);
+  background-image: radial-gradient(1200px 500px at 100% -5%, rgba(5, 150, 105, 0.08), transparent 60%),
+    radial-gradient(900px 500px at -10% 0%, rgba(14, 165, 233, 0.07), transparent 55%);
+  background-attachment: fixed;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -451,4 +454,125 @@ textarea:focus-visible {
   .form-grid { grid-template-columns: 1fr; }
   .span-2, .span-3, .span-4 { grid-column: span 1; }
   .brand-subtitle { display: none; }
+}
+
+/* ───────────────────────────── View switcher ───────────────────────────── */
+.view-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.view-switcher {
+  display: inline-flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+.view-tab {
+  border: none;
+  background: transparent;
+  color: var(--text-soft);
+  font-weight: 600;
+  font-size: 0.86rem;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.view-tab:hover { color: var(--text); }
+.view-tab.is-active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px -2px rgba(5, 150, 105, 0.6);
+}
+.result-count { font-size: 0.82rem; color: var(--text-mute); }
+
+/* Chip « prix/jour effectif » mis en avant */
+.price-chip.eff {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #b45309;
+}
+.price-chip.eff strong { color: #92400e; }
+
+/* ───────────────────────────── Comparateur ─────────────────────────────── */
+.compare-hint {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  -webkit-overflow-scrolling: touch;
+}
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  min-width: 720px;
+}
+.compare-table thead th {
+  text-align: left;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-mute);
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+  position: sticky;
+  top: 0;
+}
+.compare-table td,
+.compare-table tbody th {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-weight: 400;
+  vertical-align: middle;
+}
+.compare-table tbody tr:last-child td,
+.compare-table tbody tr:last-child th { border-bottom: none; }
+.compare-table tbody tr:hover { background: var(--surface-2); }
+.compare-table .num { text-align: right; white-space: nowrap; }
+.compare-table thead th.num { text-align: right; }
+.compare-table .eff { font-weight: 700; color: var(--text); }
+.agency-cell { display: flex; flex-direction: column; gap: 2px; min-width: 160px; }
+.cell-zone { font-size: 0.74rem; color: var(--text-mute); }
+.linklike {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--primary-dark);
+  cursor: pointer;
+  text-align: left;
+}
+.linklike:hover { text-decoration: underline; }
+.compare-table tr.is-best {
+  background: #f0fdf4;
+}
+.compare-table tr.is-best:hover { background: #dcfce7; }
+.compare-table tr.is-best .eff { color: var(--primary-dark); }
+.trophy { margin-right: 4px; }
+.contact-btn.sm { padding: 4px 10px; font-size: 0.76rem; }
+
+@media (max-width: 720px) {
+  .view-bar { justify-content: center; }
+  .view-switcher { width: 100%; justify-content: center; }
+  .view-tab { flex: 1; text-align: center; }
 }
