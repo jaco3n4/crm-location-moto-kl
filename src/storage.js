@@ -32,17 +32,58 @@ function normalize(partial) {
   return { ...blankAgency(), ...partial, id: partial.id || uid() }
 }
 
+// Clé annexe : noms d'agences déjà « semées » (pour ne pas ré-ajouter une
+// agence du seed que l'utilisateur a supprimée).
+const SEEDED_KEY = STORAGE_KEY + ':seeded'
+const keyName = (nom) => String(nom || '').trim().toLowerCase()
+
+function loadLedger() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(SEEDED_KEY)) || [])
+  } catch {
+    return new Set()
+  }
+}
+function saveLedger(set) {
+  try {
+    localStorage.setItem(SEEDED_KEY, JSON.stringify([...set]))
+  } catch (err) {
+    console.error('Écriture du registre impossible :', err)
+  }
+}
+
 export function loadAgencies() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
+
+    // Première visite : on sème toutes les agences.
     if (!raw) {
       const seeded = SEED_AGENCIES.map(normalize)
       saveAgencies(seeded)
+      saveLedger(new Set(SEED_AGENCIES.map((s) => keyName(s.nom))))
       return seeded
     }
+
     const parsed = JSON.parse(raw)
-    if (!Array.isArray(parsed)) return []
-    return parsed.map(normalize)
+    const list = Array.isArray(parsed) ? parsed.map(normalize) : []
+
+    // Fusion : ajoute les agences du seed jamais vues (ni présentes, ni déjà
+    // semées puis supprimées). Préserve toutes les données de l'utilisateur.
+    const ledger = loadLedger()
+    const existing = new Set(list.map((a) => keyName(a.nom)))
+    let added = false
+    for (const s of SEED_AGENCIES) {
+      const k = keyName(s.nom)
+      if (!ledger.has(k) && !existing.has(k)) {
+        list.unshift(normalize(s))
+        existing.add(k)
+        added = true
+      }
+      ledger.add(k)
+    }
+    saveLedger(ledger)
+    if (added) saveAgencies(list)
+    return list
   } catch (err) {
     console.error('Lecture du stockage impossible :', err)
     return SEED_AGENCIES.map(normalize)

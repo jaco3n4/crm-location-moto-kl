@@ -17,7 +17,7 @@ export const DEFAULT_STATUS = 'a_contacter'
 // Statuts mis en avant dans la barre de statistiques.
 export const STAT_STATUSES = ['a_contacter', 'contacte', 'prix_recu', 'valide']
 
-// ── Zones / quartiers de Kuala Lumpur ──────────────────────────────────────
+// ── Zones / quartiers de KL et villes de Selangor (≤ ~30 km) ───────────────
 export const ZONES = [
   'Bukit Bintang',
   'KLCC',
@@ -30,6 +30,12 @@ export const ZONES = [
   'Ampang',
   'Sentul',
   'Petaling Jaya',
+  'Damansara',
+  'Subang Jaya',
+  'Shah Alam',
+  'Puchong',
+  'Klang',
+  'Kajang',
   'Autre',
 ]
 
